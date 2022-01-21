@@ -1,4 +1,9 @@
-﻿
+﻿----------------------------------- 别名 -----------------------------------
+-- 【重点】根据 SQL 的解析顺序，在 ORDER BY 中是可以使用别名的
+-- 查询员工的姓名、工资别名为工资，并且按照工资的降序排列
+SELECT ename, sal 工资 FROM emp ORDER BY 工资 DESC;
+
+
 ----------------------------------- 伪列 -----------------------------------
 -- 查询用户姓名，工资, 1  <-- 这里的 1 就是伪列
 SELECT ename, sal, 1 from emp;
@@ -26,4 +31,17 @@ SELECT * FROM emp ORDER BY comm DESC NULLS FIRST;
 SELECT * FROM emp ORDER BY comm DESC NULLS LAST;
 
 
+
 ----------------------------------- 字符串拼接 -----------------------------------
+SELECT ename FROM emp;
+-- 名字后面都加上一个 fox` 
+SELECT ename, ename||'fox' AS This_is_Alisa FROM emp;
+-- 【重点】如果在字符串拼接时，遇到了null，那么对自动转换为空字符串，而不是也为 null！
+SELECT ename, comm , ename || comm AS null_merge FROM emp;
+
+
+
+----------------------------------- dual 虚表 -----------------------------------
+SELECT 666 * 999 FROM dual;
+
+

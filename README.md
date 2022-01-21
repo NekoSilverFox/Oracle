@@ -66,13 +66,37 @@ SELECT 666 * 999 FROM dual;
 
 ## SELECT
 
-- 基本语法
+- **基本语法**
 
     ```sql
-    SELECT 查询的信息 FROM 数据来源;
+    SELECT [DISTINCT]
+            字段, 
+            字段 AS 别名, 
+            字段 || 拼接的字符串, 
+            伪列
+    	FROM 数据来源
+    	ORDER BY 
+    		排序字段
+    		[ASC（升序）] / [DESC（降序）]
+    		[NULLS FIRST] / [NULLS LAST]
+    	;
     ```
 
 
+
+- 解析顺序
+
+    ```sql
+    	2		1			3
+    SELECT ... FROM ... ORDER BY ... ;
+    
+    
+    -- 【重点】根据 SQL 的解析顺序，在 ORDER BY 中是可以使用别名的
+    -- 查询员工的姓名、工资别名为工资，并且按照工资的降序排列
+    SELECT ename, sal 工资 FROM emp ORDER BY 工资 DESC;
+    ```
+
+    
 
 - **去重**
 
@@ -118,7 +142,7 @@ SELECT 666 * 999 FROM dual;
     -- 查询姓名，月工资，年薪（月薪*12），这里的年薪就是伪列
     SELECT ename, sal, sal*12 FROM emp;
     
-    SELECT ename, sal, sal*12 as "年薪" FROM emp;
+    SELECT ename, sal, sal*12 AS "年薪" FROM emp;
     ```
 
     
@@ -127,7 +151,9 @@ SELECT 666 * 999 FROM dual;
 
     **在进行表达式或者排序操作的时候会遇到对空值的处理**，其中：
 
-    - 如果表达式运算中有一个列为空值，则结果为空
+    - 如果**表达式运算**中有字段为 null，则**结果为 null**；
+
+    - 如果字符串拼接中有字段为 null，则改空值被处理为**空字符串**；
 
         `nvl(表达式或列，如果参数1为空的话使用的值)` - 可以**对 null 进行处理**
 
@@ -141,7 +167,7 @@ SELECT 666 * 999 FROM dual;
 
         
 
-    - 如果在排序中，被排序的行有的为空值，那么这些行无法被排序
+    - 如果在**排序**中，被排序的行有的为空值，那么这些行无法被排序
 
         `nulls first` 将空值的放在最前面
 
