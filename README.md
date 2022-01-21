@@ -74,6 +74,7 @@ SELECT 666 * 999 FROM dual;
     	WHERE 
     		行记录条件=? [AND] / [OR] / [NOT] 
     		行记录条件='?'
+    		字段 [is null] / [is not null] / [not ... is null]
     	ORDER BY 
     		排序字段
     		[ASC（升序）] / [DESC（降序）]
@@ -152,7 +153,7 @@ SELECT 666 * 999 FROM dual;
 
     
 
-- **空值处理**
+- **null 处理**
 
     **在进行表达式或者排序操作的时候会遇到对空值的处理**，其中：
 
@@ -160,7 +161,7 @@ SELECT 666 * 999 FROM dual;
 
     - 如果字符串拼接中有字段为 null，则改空值被处理为**空字符串**；
 
-        `nvl(表达式或列，如果参数1为空的话使用的值)` - 可以**对 null 进行处理**
+        `nvl(表达式或列，如果参数1为空的话使用的值)` - 可以**对 null 进行处理**，当某个值为空的时候，用一个特定的值替换
 
         ```SQL
         -- 查询员工月收入（工资+提成）
@@ -168,6 +169,9 @@ SELECT 666 * 999 FROM dual;
         
         -- nvl(表达式或列，如果参数1为空的话使用的值) 
         select ename, sal, comm, sal+NVL(comm， 0) as "月收入" from emp; -- 如果 comm 为空则使用 0 进行替代
+        
+        -- 查询所有没有奖金的员工（comm <= 0），当某个人的将近为 null 时，则认为他的奖金为 0
+        SELECT * FROM emp WHERE NVL(comm, 0)<=0 OR comm <=0;
         ```
 
         
