@@ -4,6 +4,8 @@
 SELECT ename, sal 工资 FROM emp ORDER BY 工资 DESC;
 
 
+
+
 ----------------------------------- 伪列 -----------------------------------
 -- 查询用户姓名，工资, 1  <-- 这里的 1 就是伪列
 SELECT ename, sal, 1 from emp;
@@ -43,5 +45,15 @@ SELECT ename, comm , ename || comm AS null_merge FROM emp;
 
 ----------------------------------- dual 虚表 -----------------------------------
 SELECT 666 * 999 FROM dual;
+
+
+
+----------------------------------- WHERE -----------------------------------
+-- （BETWEEN ... AND... 用法）查询工资在 2000 到 3000 之间的员工信息
+SELECT * FROM emp WHERE sal BETWEEN 2000 AND 3000;
+
+-- 【重点】（IN 用法）查询在 10 或 20 号部门工作的员工信息
+SELECT * FROM emp WHERE deptno IN (10, 20);
+
 
 

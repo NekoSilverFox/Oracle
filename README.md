@@ -58,10 +58,6 @@ SELECT 666 * 999 FROM dual;
 
 
 
-
-
-
-
 # SQL 命令
 
 ## SELECT
@@ -75,20 +71,29 @@ SELECT 666 * 999 FROM dual;
             字段 || 拼接的字符串, 
             伪列
     	FROM 数据来源
+    	WHERE 
+    		行记录条件=? [AND] / [OR] / [NOT] 
+    		行记录条件='?'
     	ORDER BY 
     		排序字段
     		[ASC（升序）] / [DESC（降序）]
     		[NULLS FIRST] / [NULLS LAST]
     	;
     ```
+    
+    - **不等于**可以用 `!=`、`<>`、`^=` 进行表示
+    - `WHERE` 范围取值可用 `BETWEEN ... AND ...`、`IN`
+        - `BETWEEN ... AND ...` 的取值范围是 [Right, Left]。**是左右闭区间**
+        - `IN` 的取值范围可以使用 `IN (值1, 值2, 值3, ...)`
+    - 在 `WHERE` 的条件中，**被单引号所包含的字符串是区分大小写的**！
 
 
 
-- 解析顺序
+- **解析顺序**
 
     ```sql
-    	2		1			3
-    SELECT ... FROM ... ORDER BY ... ;
+    	3		1		2			4
+    SELECT ... FROM ... WHERE ... ORDER BY ... ;
     
     
     -- 【重点】根据 SQL 的解析顺序，在 ORDER BY 中是可以使用别名的
@@ -200,7 +205,23 @@ SELECT 666 * 999 FROM dual;
 
 
 
+- **WHERE**
 
+	- **不等于**可以用 `!=`、`<>`、`^=` 进行表示
+	- `WHERE` 范围取值可用 `BETWEEN ... AND ...`、`IN`
+	    - `BETWEEN ... AND ...` 的取值范围是 [Right, Left]。**是左右闭区间**
+	    - `IN` 的取值范围可以使用 `IN (值1, 值2, 值3, ...)`
+	- 在 `WHERE` 的条件中，**被单引号所包含的字符串是区分大小写的**！
+	
+	```sql
+	-- （BETWEEN ... AND... 用法）查询工资在 2000 到 3000 之间的员工信息
+	SELECT * FROM emp WHERE sal BETWEEN 2000 AND 3000;
+	
+	-- 【重点】（IN 用法）查询在 10 或 20 号部门工作的员工信息
+	SELECT * FROM emp WHERE deptno IN (10, 20);
+	```
+	
+	
 
 
 
