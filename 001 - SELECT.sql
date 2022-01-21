@@ -32,6 +32,8 @@ SELECT * FROM emp ORDER BY comm ASC;
 SELECT * FROM emp ORDER BY comm DESC NULLS FIRST;
 SELECT * FROM emp ORDER BY comm DESC NULLS LAST;
 
+-- 查询所有没有奖金的员工（comm <= 0），当某个人的将近为 null 时，则认为他的奖金为 0
+SELECT * FROM emp WHERE NVL(comm, 0)<=0 OR comm <=0;
 
 
 ----------------------------------- 字符串拼接 -----------------------------------
@@ -55,5 +57,34 @@ SELECT * FROM emp WHERE sal BETWEEN 2000 AND 3000;
 -- 【重点】（IN 用法）查询在 10 或 20 号部门工作的员工信息
 SELECT * FROM emp WHERE deptno IN (10, 20);
 
+
+
+----------------------------------- 模糊查询 -----------------------------------
+-- 名字以 ** S 开头 ** 的员工
+SELECT * FROM emp WHERE ename LIKE 'S%';
+
+-- 名字以 ** S 结尾 ** 的员工
+SELECT * FROM emp WHERE ename LIKE '%S';
+
+-- 名字 ** 含有 S ** 的员工
+SELECT * FROM emp WHERE ename LIKE '%S%';
+
+-- 查询名字第 2 个字母为 `A` 的
+SELECT * FROM emp WHERE ename LIKE '_A%';
+
+-- 查询名字倒数第 2 个字母为 `I` 的
+SELECT * FROM emp WHERE ename LIKE '%I_';
+
+-- 查询员工名字中包含 `%` 的
+SELECT * FROM emp;
+INSERT INTO emp(empno, ename, job, deptno) VALUES(1252, 'fox%e_r', 'eee', 20);
+COMMIT;
+SELECT * FROM emp WHERE ename LIKE '%a%%' escape('a'); -- 【重点】escape('标识符') 表示标识符后面紧挨的[一个字符]为普通字符，不具有特殊含义；这个标识符可以为任意字符
+
+-- 查询员工名字中包含 `x%` 的
+SELECT * FROM emp WHERE ename LIKE '%xxx%%' escape('x');
+
+-- 查询员工名字中包含 `%` `_` 的
+SELECT * FROM emp WHERE ename LIKE '%x%%x_%' escape('x');
 
 

@@ -60,35 +60,36 @@ SELECT 666 * 999 FROM dual;
 
 # SQL 命令
 
+## 基本语法
+
+```sql
+SELECT [DISTINCT]
+        字段, 
+        字段 AS 别名, 
+        字段 || 拼接的字符串, 
+        伪列
+	FROM 数据来源
+	WHERE 
+		行记录条件=? [AND] / [OR] / [NOT] 
+		行记录条件='?'
+		字段 [is null] / [is not null] / [not ... is null]
+		LIKE '%_a%%' EXCAPE('a')
+	ORDER BY 
+		排序字段
+		[ASC（升序）] / [DESC（降序）]
+		[NULLS FIRST] / [NULLS LAST]
+	;
+```
+
+- **不等于**可以用 `!=`、`<>`、`^=` 进行表示
+- `WHERE` 范围取值可用 `BETWEEN ... AND ...`、`IN`
+    - `BETWEEN ... AND ...` 的取值范围是 [Right, Left]。**是左右闭区间**
+    - `IN` 的取值范围可以使用 `IN (值1, 值2, 值3, ...)`
+- 在 `WHERE` 的条件中，**被单引号所包含的字符串是区分大小写的**！
+
+
+
 ## SELECT
-
-- **基本语法**
-
-    ```sql
-    SELECT [DISTINCT]
-            字段, 
-            字段 AS 别名, 
-            字段 || 拼接的字符串, 
-            伪列
-    	FROM 数据来源
-    	WHERE 
-    		行记录条件=? [AND] / [OR] / [NOT] 
-    		行记录条件='?'
-    		字段 [is null] / [is not null] / [not ... is null]
-    	ORDER BY 
-    		排序字段
-    		[ASC（升序）] / [DESC（降序）]
-    		[NULLS FIRST] / [NULLS LAST]
-    	;
-    ```
-    
-    - **不等于**可以用 `!=`、`<>`、`^=` 进行表示
-    - `WHERE` 范围取值可用 `BETWEEN ... AND ...`、`IN`
-        - `BETWEEN ... AND ...` 的取值范围是 [Right, Left]。**是左右闭区间**
-        - `IN` 的取值范围可以使用 `IN (值1, 值2, 值3, ...)`
-    - 在 `WHERE` 的条件中，**被单引号所包含的字符串是区分大小写的**！
-
-
 
 - **解析顺序**
 
@@ -209,23 +210,69 @@ SELECT 666 * 999 FROM dual;
 
 
 
-- **WHERE**
+## WHERE
 
-	- **不等于**可以用 `!=`、`<>`、`^=` 进行表示
-	- `WHERE` 范围取值可用 `BETWEEN ... AND ...`、`IN`
-	    - `BETWEEN ... AND ...` 的取值范围是 [Right, Left]。**是左右闭区间**
-	    - `IN` 的取值范围可以使用 `IN (值1, 值2, 值3, ...)`
-	- 在 `WHERE` 的条件中，**被单引号所包含的字符串是区分大小写的**！
-	
-	```sql
-	-- （BETWEEN ... AND... 用法）查询工资在 2000 到 3000 之间的员工信息
-	SELECT * FROM emp WHERE sal BETWEEN 2000 AND 3000;
-	
-	-- 【重点】（IN 用法）查询在 10 或 20 号部门工作的员工信息
-	SELECT * FROM emp WHERE deptno IN (10, 20);
-	```
-	
-	
+- **不等于**可以用 `!=`、`<>`、`^=` 进行表示
+- `WHERE` 范围取值可用 `BETWEEN ... AND ...`、`IN`
+    - `BETWEEN ... AND ...` 的取值范围是 [Right, Left]。**是左右闭区间**
+    - `IN` 的取值范围可以使用 `IN (值1, 值2, 值3, ...)`
+- 在 `WHERE` 的条件中，**被单引号所包含的字符串是区分大小写的**！
+
+```sql
+-- （BETWEEN ... AND... 用法）查询工资在 2000 到 3000 之间的员工信息
+SELECT * FROM emp WHERE sal BETWEEN 2000 AND 3000;
+
+-- 【重点】（IN 用法）查询在 10 或 20 号部门工作的员工信息
+SELECT * FROM emp WHERE deptno IN (10, 20);
+```
+
+
+
+- **模糊查询**
+
+    关键字：`LIKE`
+
+    其中：
+
+    - `%` 表示匹配任意多个字符
+    - `_` 表示匹配任意 1 个字符
+    - `escape('标识符') ` 函数表示**标识符后面紧挨的【一个字符】为普通字符**，不具有特殊含义；这个标识符可以为任意字符
+
+    ```sqlite
+    ----------------------------------- 模糊查询 -----------------------------------
+    -- 名字以 ** S 开头 ** 的员工
+    SELECT * FROM emp WHERE ename LIKE 'S%';
+    
+    -- 名字以 ** S 结尾 ** 的员工
+    SELECT * FROM emp WHERE ename LIKE '%S';
+    
+    -- 名字 ** 含有 S ** 的员工
+    SELECT * FROM emp WHERE ename LIKE '%S%';
+    
+    -- 查询名字第 2 个字母为 `A` 的
+    SELECT * FROM emp WHERE ename LIKE '_A%';
+    
+    -- 查询名字倒数第 2 个字母为 `I` 的
+    SELECT * FROM emp WHERE ename LIKE '%I_';
+    
+    -- 查询员工名字中包含 `%` 的
+    SELECT * FROM emp;
+    INSERT INTO emp(empno, ename, job, deptno) VALUES(1252, 'fox%e_r', 'eee', 20);
+    COMMIT;
+    SELECT * FROM emp WHERE ename LIKE '%a%%' escape('a'); -- 【重点】escape('标识符') 表示标识符后面紧挨的[一个字符]为普通字符，不具有特殊含义；这个标识符可以为任意字符
+    
+    -- 查询员工名字中包含 `x%` 的
+    SELECT * FROM emp WHERE ename LIKE '%xxx%%' escape('x');
+    
+    -- 查询员工名字中包含 `%` `_` 的
+    SELECT * FROM emp WHERE ename LIKE '%x%%x_%' escape('x');
+    ```
+
+    
+
+
+
+- 
 
 
 
