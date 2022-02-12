@@ -36,6 +36,7 @@ SELECT * FROM emp ORDER BY comm DESC NULLS LAST;
 SELECT * FROM emp WHERE NVL(comm, 0)<=0 OR comm <=0;
 
 
+
 ----------------------------------- 字符串拼接 -----------------------------------
 SELECT ename FROM emp;
 -- 名字后面都加上一个 fox` 
@@ -45,8 +46,10 @@ SELECT ename, comm , ename || comm AS null_merge FROM emp;
 
 
 
+
 ----------------------------------- dual 虚表 -----------------------------------
 SELECT 666 * 999 FROM dual;
+
 
 
 
